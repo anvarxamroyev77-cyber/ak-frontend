@@ -1,37 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-function Music() {
-  const categories = {
-    Rap: ['Rap Song 1', 'Rap Song 2', 'Rap Song 3'],
-    HipHop: ['HipHop Song 1', 'HipHop Song 2', 'HipHop Song 3'],
-    Pop: ['Pop Song 1', 'Pop Song 2']
+export default function Music() {
+  const [music, setMusic] = useState([]);
+  const [playing, setPlaying] = useState(null);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/music`)
+      .then(res => res.json())
+      .then(data => setMusic(data));
+  }, []);
+
+  const playAudio = (url) => {
+    const audio = new Audio(url);
+    if(playing) playing.pause();
+    setPlaying(audio);
+    audio.play();
   };
 
-  const [selectedCat, setSelectedCat] = useState('Rap');
-
   return (
-    <div className="p-8 max-w-2xl mx-auto bg-white shadow rounded mt-10">
-      <h2 className="text-2xl font-bold mb-4">Music Library</h2>
-      
-      <div className="flex space-x-4 mb-4">
-        {Object.keys(categories).map(cat => (
-          <button 
-            key={cat} 
-            onClick={() => setSelectedCat(cat)}
-            className={`px-4 py-2 rounded ${selectedCat===cat ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-          >
-            {cat}
-          </button>
+    <div className="p-6 mt-20">
+      <h2 className="text-3xl font-bold mb-6 text-center">Music Albums</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {music.map((m) => (
+          <div key={m._id} className="bg-white p-4 rounded-xl shadow-lg hover:scale-105 transition-transform cursor-pointer" onClick={() => playAudio(m.audio)}>
+            <img src={m.cover} alt={m.title} className="w-full h-48 object-cover rounded-lg mb-2"/>
+            <h4 className="font-bold">{m.title}</h4>
+            <p className="text-gray-500">{m.artist}</p>
+          </div>
         ))}
       </div>
-
-      <ul className="space-y-2">
-        {categories[selectedCat].map((song, i) => (
-          <li key={i} className="p-2 border rounded hover:bg-blue-50">{song}</li>
-        ))}
-      </ul>
     </div>
   );
 }
-
-export default Music;
