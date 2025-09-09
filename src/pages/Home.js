@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { FaHeart, FaComment, FaShare } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-// Dummy Data
+/* ---------------- HERO BANNERS ---------------- */
 const heroBanners = [
   { id: 1, img: "https://picsum.photos/1200/400?random=1", text: "Welcome to AK Platform" },
   { id: 2, img: "https://picsum.photos/1200/400?random=2", text: "Listen to the hottest music!" },
   { id: 3, img: "https://picsum.photos/1200/400?random=3", text: "Watch trending movies & trailers" },
+  { id: 4, img: "https://picsum.photos/1200/400?random=4", text: "Connect with friends instantly" },
+  { id: 5, img: "https://picsum.photos/1200/400?random=5", text: "Explore new albums & playlists" },
+  // Add up to 20 banners for full expansion
 ];
 
-const storiesRows = Array.from({ length: 3 }, (_, r) =>
+/* ---------------- STORIES ---------------- */
+const storiesRows = Array.from({ length: 5 }, (_, r) =>
   Array.from({ length: 15 }, (_, i) => ({
     id: `story-${r}-${i}`,
     name: `User${i + 1 + r * 15}`,
@@ -18,9 +22,10 @@ const storiesRows = Array.from({ length: 3 }, (_, r) =>
   }))
 );
 
+/* ---------------- MUSIC ---------------- */
 const genres = ["Rap", "HipHop", "Pop", "Rock", "Jazz"];
 const genreAlbums = genres.map((genre) =>
-  Array.from({ length: 12 }, (_, i) => ({
+  Array.from({ length: 15 }, (_, i) => ({
     id: `${genre}-${i}`,
     title: `${genre} Album ${i + 1}`,
     artist: `${genre} Artist ${i + 1}`,
@@ -29,15 +34,20 @@ const genreAlbums = genres.map((genre) =>
   }))
 );
 
-const movies = Array.from({ length: 50 }, (_, i) => ({
-  id: i,
-  title: `Movie ${i + 1}`,
-  genre: ["Action", "Comedy", "Drama", "Horror", "Sci-Fi"][i % 5],
-  year: 2000 + (i % 23),
-  poster: `https://picsum.photos/300/450?random=${i + 1}`,
-  trailer: `https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4`,
-}));
+/* ---------------- MOVIES ---------------- */
+const movieGenres = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi"];
+const movies = movieGenres.flatMap((genre) =>
+  Array.from({ length: 20 }, (_, i) => ({
+    id: `${genre}-${i}`,
+    title: `${genre} Movie ${i + 1}`,
+    genre,
+    year: 2000 + (i % 23),
+    poster: `https://picsum.photos/300/450?random=${i + 1}`,
+    trailer: `https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4`,
+  }))
+);
 
+/* ---------------- POSTS ---------------- */
 const posts = Array.from({ length: 100 }, (_, i) => ({
   id: i,
   user: `User${i + 1}`,
@@ -47,7 +57,8 @@ const posts = Array.from({ length: 100 }, (_, i) => ({
   video: i % 5 === 0 ? `https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4` : null,
 }));
 
-const suggestedFriends = Array.from({ length: 20 }, (_, i) => ({
+/* ---------------- SUGGESTED FRIENDS ---------------- */
+const suggestedFriends = Array.from({ length: 50 }, (_, i) => ({
   id: i,
   name: `Friend${i + 1}`,
   avatar: `https://i.pravatar.cc/150?img=${i + 41}`,
@@ -73,14 +84,14 @@ export default function Home() {
 
   return (
     <div className="mt-24 p-6 bg-gray-100 min-h-screen">
-      {/* Hero Carousel */}
+      {/* ---------------- HERO ---------------- */}
       <section className="mb-16 relative">
         {heroBanners.map((banner, idx) => (
           <motion.div
             key={banner.id}
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: idx * 0.3 }}
+            transition={{ duration: 1, delay: idx * 0.2 }}
             className="absolute w-full h-96 rounded-xl overflow-hidden"
           >
             <img src={banner.img} alt={banner.text} className="w-full h-full object-cover" />
@@ -91,7 +102,7 @@ export default function Home() {
         ))}
       </section>
 
-      {/* Stories Section */}
+      {/* ---------------- STORIES ---------------- */}
       {storiesRows.map((row, rIdx) => (
         <section key={rIdx} className="mb-16">
           <h2 className="text-3xl font-bold mb-4">Stories Row {rIdx + 1}</h2>
@@ -112,7 +123,7 @@ export default function Home() {
         </section>
       ))}
 
-      {/* Trending Music by Genre */}
+      {/* ---------------- MUSIC ---------------- */}
       {genreAlbums.map((albums, idx) => (
         <section key={genres[idx]} className="mb-16">
           <h3 className="text-2xl font-semibold mb-4">{genres[idx]} Music</h3>
@@ -133,7 +144,7 @@ export default function Home() {
         </section>
       ))}
 
-      {/* Trending Movies by Genre */}
+      {/* ---------------- MOVIES ---------------- */}
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-4">Trending Movies</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
@@ -151,7 +162,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* News Feed / Posts */}
+      {/* ---------------- POSTS ---------------- */}
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-4">News Feed</h2>
         <div className="space-y-6">
@@ -178,7 +189,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Suggested Friends */}
+      {/* ---------------- SUGGESTED FRIENDS ---------------- */}
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-4">Suggested Friends</h2>
         <div className="flex overflow-x-auto space-x-4 p-2">
@@ -201,7 +212,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ---------------- FOOTER ---------------- */}
       <footer className="bg-white p-6 rounded-xl shadow-lg text-center">
         <p>© 2025 AK Platform. All rights reserved.</p>
         <div className="flex justify-center space-x-4 mt-2">
